@@ -41,25 +41,25 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.023
   m_SuspensionSpring:
-    spring: 20
+    spring: 0
     damper: 0
     targetPosition: 0
-  m_SuspensionDistance: 0.02
+  m_SuspensionDistance: 0
   m_ForceAppPointDistance: 0
   m_Mass: 0.1
-  m_WheelDampingRate: 0.25
+  m_WheelDampingRate: 20
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 1
+    m_Stiffness: 0.6
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.2
+    m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
-    m_AsymptoteSlip: 0.5
+    m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 2
   m_Enabled: 1
 --- !u!1001 &3917291546318921258
 PrefabInstance:
