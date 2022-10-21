@@ -75,8 +75,8 @@ HingeJoint:
     freeSpin: 0
   m_UseLimits: 1
   m_Limits:
-    min: -7
-    max: 7
+    min: -4
+    max: 4
     bounciness: 1
     bounceMinVelocity: 0.2
     contactDistance: 1
