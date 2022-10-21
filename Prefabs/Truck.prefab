@@ -65,8 +65,8 @@ HingeJoint:
   m_ConnectedAnchor: {x: 0, y: 0.017, z: 0.02}
   m_UseSpring: 1
   m_Spring:
-    spring: 4
-    damper: 4
+    spring: 0
+    damper: 2
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
@@ -75,11 +75,11 @@ HingeJoint:
     freeSpin: 0
   m_UseLimits: 1
   m_Limits:
-    min: -4
-    max: 4
+    min: -7
+    max: 7
     bounciness: 1
     bounceMinVelocity: 0.2
-    contactDistance: 0
+    contactDistance: 1
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_EnableCollision: 1
