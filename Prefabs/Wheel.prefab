@@ -56,7 +56,7 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 6911197716042124901}
   deck: {fileID: 0}
-  radius: 1
+  radius: 0.2
 --- !u!114 &6911197716042124901
 MonoBehaviour:
   m_ObjectHideFlags: 0

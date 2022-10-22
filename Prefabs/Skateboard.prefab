@@ -170,6 +170,8 @@ MonoBehaviour:
   - {fileID: 1313326404822726226}
   - {fileID: 9107838705221273468}
   - {fileID: 2431384593937528769}
+  forwardFriction: 0.005
+  sideFriction: 0.2
 --- !u!114 &5963797367684336813
 MonoBehaviour:
   m_ObjectHideFlags: 0
