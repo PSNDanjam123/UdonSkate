@@ -40,15 +40,27 @@ namespace UdonSkate.Skateboard
 
         private void _applySurfaceForce(Vector3 normal)
         {
+            // redirect force
             rb.AddForce(-Vector3.Project(rb.velocity, -normal), ForceMode.Impulse);
             rb.AddForce(-Vector3.Project(Physics.gravity, -normal), ForceMode.Acceleration);
 
+            // add distance if getting too close to ground
             if (Physics.Raycast(transform.position, -normal, out RaycastHit hitInfo, 0.3f))
             {
                 if (Vector3.Distance(transform.position, hitInfo.point) > 0.2f)
                 {
-                    rb.AddForce(-Vector3.Project(Physics.gravity, -normal), ForceMode.Acceleration);
+                    rb.AddForce(-Vector3.Project(Physics.gravity, -normal), ForceMode.Impulse);
                 }
+            }
+
+            // reduce sideways movement
+            if (Vector3.Angle(rb.velocity.normalized, transform.right) > 90)
+            {
+                rb.AddForce(-Vector3.Project(rb.velocity, -transform.right), ForceMode.Impulse);
+            }
+            else
+            {
+                rb.AddForce(-Vector3.Project(rb.velocity, transform.right), ForceMode.Impulse);
             }
         }
 
