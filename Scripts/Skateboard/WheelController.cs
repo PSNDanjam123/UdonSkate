@@ -1,8 +1,6 @@
 ﻿
 using UdonSharp;
 using UnityEngine;
-using VRC.SDKBase;
-using VRC.Udon;
 
 namespace UdonSkate.Skateboard
 {
@@ -49,7 +47,6 @@ namespace UdonSkate.Skateboard
         private void _raycast()
         {
             collision = Physics.Raycast(transform.position, -transform.up, out hitInfo, radius);
-            Debug.DrawLine(transform.position, transform.position + (-transform.up * radius), Color.white);
         }
 
     }

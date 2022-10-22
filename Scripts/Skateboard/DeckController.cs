@@ -1,8 +1,6 @@
 ﻿
 using UdonSharp;
 using UnityEngine;
-using VRC.SDKBase;
-using VRC.Udon;
 
 namespace UdonSkate.Skateboard
 {
@@ -10,6 +8,7 @@ namespace UdonSkate.Skateboard
     {
         public WheelController[] wheels;
 
+        public float pushForce = 5.0f;
         public float forwardFriction = 0.005f;
         public float sideFriction = 0.2f;
 
@@ -30,10 +29,20 @@ namespace UdonSkate.Skateboard
             {
                 Vector3 normal = _calculateNormal();
                 _applySurfaceForce(normal);
-                Vector3 forwardRot = _calculateForwardRotation(normal);
-                Debug.DrawLine(transform.position, transform.position - forwardRot, Color.magenta);
-                rb.rotation = Quaternion.LookRotation(forwardRot, normal);
+                Vector3 forward = _calculateForwardRotation(normal);
+                rb.rotation = Quaternion.LookRotation(forward, normal);
             }
+        }
+
+        public void Push()
+        {
+            if (!grounded)
+            {
+                return;
+            }
+            Vector3 normal = _calculateNormal();
+            Vector3 forward = _calculateForwardRotation(normal).normalized;
+            rb.AddForce(forward * pushForce, ForceMode.Impulse);
         }
 
         private void _init()
