@@ -1,6 +1,7 @@
 ﻿
 using UdonSharp;
 using UnityEngine;
+using VRC.SDKBase;
 
 namespace UdonSkate.Skateboard
 {
@@ -13,8 +14,12 @@ namespace UdonSkate.Skateboard
         public float sideFriction = 0.2f;
 
         private Rigidbody rb;
+        private VRC_Pickup vRC_Pickup;
 
-        private bool grounded = false;
+        /** STATES */
+
+        private bool STATE_GROUNDED = false;
+        private bool STATE_PICKED_UP = false;
 
         void Start()
         {
@@ -24,8 +29,12 @@ namespace UdonSkate.Skateboard
 
         void Update()
         {
+            if (STATE_PICKED_UP)
+            {
+                return; // no need to process anything as player is holding
+            }
             _setGrounded();
-            if (grounded)
+            if (STATE_GROUNDED)
             {
                 Vector3 normal = _calculateNormal();
                 _applySurfaceForce(normal);
@@ -36,7 +45,7 @@ namespace UdonSkate.Skateboard
 
         public void Push()
         {
-            if (!grounded)
+            if (!STATE_GROUNDED)
             {
                 return;
             }
@@ -45,9 +54,20 @@ namespace UdonSkate.Skateboard
             rb.AddForce(forward * pushForce, ForceMode.Impulse);
         }
 
+        public override void OnPickup()
+        {
+            STATE_PICKED_UP = true;
+        }
+        public override void OnDrop()
+        {
+            STATE_PICKED_UP = false;
+        }
+
+
         private void _init()
         {
             rb = GetComponent<Rigidbody>();
+            vRC_Pickup = GetComponent<VRC_Pickup>();
         }
 
         private void _applySurfaceForce(Vector3 normal)
@@ -122,12 +142,12 @@ namespace UdonSkate.Skateboard
             {
                 if (wheel.Collision)
                 {
-                    grounded = true;
+                    STATE_GROUNDED = true;
                     return;
                 }
 
             }
-            grounded = false;
+            STATE_GROUNDED = false;
         }
     }
 }
