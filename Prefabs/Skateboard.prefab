@@ -175,7 +175,7 @@ MonoBehaviour:
   - {fileID: 2431384593937528769}
   pushForce: 5
   forwardFriction: 0.005
-  sideFriction: 0.2
+  sideFriction: 0.6
   vRC_Station: {fileID: 0}
 --- !u!114 &5963797367684336813
 MonoBehaviour:

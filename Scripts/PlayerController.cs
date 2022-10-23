@@ -24,6 +24,15 @@ namespace UdonSkate
         {
             deck.Turn(value);
         }
+
+        public override void InputJump(bool value, UdonInputEventArgs args)
+        {
+            if (!value)
+            {
+                return;
+            }
+            deck.Unmount(player);
+        }
     }
 
 }

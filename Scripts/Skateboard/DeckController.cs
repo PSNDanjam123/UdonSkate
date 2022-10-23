@@ -11,7 +11,7 @@ namespace UdonSkate.Skateboard
 
         public float pushForce = 5.0f;
         public float forwardFriction = 0.005f;
-        public float sideFriction = 0.2f;
+        public float sideFriction = 0.6f;
 
         private Rigidbody rb;   // rigidbody of the skateboard
         private VRC_Pickup vRC_Pickup;  // pickup component
@@ -19,6 +19,10 @@ namespace UdonSkate.Skateboard
         public VRCStation vRC_Station; // station follower
 
         private VRCPlayerApi player;
+
+        private bool canMount = true;
+        private float mountCooldown = 0.0f;
+        private float mountCooldownDuration = 2.0f;
 
 
         /** STATES */
@@ -58,6 +62,19 @@ namespace UdonSkate.Skateboard
                 vRC_Station.gameObject.transform.position = new Vector3(1000, 1000, 1000);
             }
 
+            if (!canMount)
+            {
+                if (mountCooldown > 0)
+                {
+                    mountCooldown -= Time.deltaTime;
+                }
+                else
+                {
+                    canMount = true;
+                    mountCooldown = 0;
+                }
+            }
+
         }
 
         public void Push()
@@ -84,12 +101,25 @@ namespace UdonSkate.Skateboard
 
         public void Mount(VRCPlayerApi player)
         {
-            if (STATE_RIDING || !STATE_GROUNDED)
+            if (STATE_RIDING || !STATE_GROUNDED || !canMount)
             {
                 return;
             }
             vRC_Station.UseStation(player);
             STATE_RIDING = true;
+        }
+        public void Unmount(VRCPlayerApi player)
+        {
+            if (!STATE_RIDING)
+            {
+                return;
+            }
+            vRC_Station.ExitStation(player);
+            player.SetVelocity(Physics.gravity.normalized * 1.0f);
+            player.Immobilize(false);
+            canMount = false;
+            mountCooldown = mountCooldownDuration;
+            STATE_RIDING = false;
         }
 
         public override void OnPickup()
