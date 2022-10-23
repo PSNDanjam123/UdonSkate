@@ -12,7 +12,6 @@ namespace UdonSkate.Skateboard
 
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
         {
-            Debug.Log("Let me ride!");
             deck.Mount(player);
         }
 

@@ -16,7 +16,10 @@ namespace UdonSkate.Skateboard
         private Rigidbody rb;   // rigidbody of the skateboard
         private VRC_Pickup vRC_Pickup;  // pickup component
 
-        public VRCStation vRC_Station; // station follwer
+        public VRCStation vRC_Station; // station follower
+
+        private VRCPlayerApi player;
+
 
         /** STATES */
 
@@ -48,11 +51,13 @@ namespace UdonSkate.Skateboard
             if (STATE_RIDING)
             {
                 vRC_Station.gameObject.transform.position = transform.position;
+                vRC_Station.gameObject.transform.rotation = Quaternion.Lerp(vRC_Station.gameObject.transform.rotation, transform.rotation, 0.1f);
             }
             else
             {
                 vRC_Station.gameObject.transform.position = new Vector3(1000, 1000, 1000);
             }
+
         }
 
         public void Push()
@@ -64,6 +69,17 @@ namespace UdonSkate.Skateboard
             Vector3 normal = _calculateNormal();
             Vector3 forward = _calculateForwardRotation(normal).normalized;
             rb.AddForce(forward * pushForce, ForceMode.Impulse);
+        }
+
+        public void Turn(float amount)
+        {
+            if (!STATE_GROUNDED || !STATE_RIDING)
+            {
+                return;
+            }
+            float turnForce = 10.0f;
+            Vector3 normal = _calculateNormal();
+            rb.AddTorque(rb.gameObject.transform.up * turnForce * amount);
         }
 
         public void Mount(VRCPlayerApi player)
@@ -90,6 +106,7 @@ namespace UdonSkate.Skateboard
         {
             rb = GetComponent<Rigidbody>();
             vRC_Pickup = GetComponent<VRC_Pickup>();
+            player = Networking.LocalPlayer;
         }
 
         private void _applySurfaceForce(Vector3 normal)

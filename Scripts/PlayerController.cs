@@ -20,8 +20,9 @@ namespace UdonSkate
             deck.Push();
         }
 
-        public override void InputLookHorizontal(float value, UdonInputEventArgs args)
+        public override void InputMoveHorizontal(float value, UdonInputEventArgs args)
         {
+            deck.Turn(value);
         }
     }
 
