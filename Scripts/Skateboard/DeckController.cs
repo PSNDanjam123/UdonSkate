@@ -13,11 +13,14 @@ namespace UdonSkate.Skateboard
         public float forwardFriction = 0.005f;
         public float sideFriction = 0.2f;
 
-        private Rigidbody rb;
-        private VRC_Pickup vRC_Pickup;
+        private Rigidbody rb;   // rigidbody of the skateboard
+        private VRC_Pickup vRC_Pickup;  // pickup component
+
+        public VRCStation vRC_Station; // station follwer
 
         /** STATES */
 
+        private bool STATE_RIDING = false;
         private bool STATE_GROUNDED = false;
         private bool STATE_PICKED_UP = false;
 
@@ -29,11 +32,12 @@ namespace UdonSkate.Skateboard
 
         void Update()
         {
+            _setPickupable();
+            _setGrounded();
             if (STATE_PICKED_UP)
             {
                 return; // no need to process anything as player is holding
             }
-            _setGrounded();
             if (STATE_GROUNDED)
             {
                 Vector3 normal = _calculateNormal();
@@ -41,17 +45,35 @@ namespace UdonSkate.Skateboard
                 Vector3 forward = _calculateForwardRotation(normal);
                 rb.rotation = Quaternion.LookRotation(forward, normal);
             }
+            if (STATE_RIDING)
+            {
+                vRC_Station.gameObject.transform.position = transform.position;
+            }
+            else
+            {
+                vRC_Station.gameObject.transform.position = new Vector3(1000, 1000, 1000);
+            }
         }
 
         public void Push()
         {
-            if (!STATE_GROUNDED)
+            if (!STATE_GROUNDED || !STATE_RIDING)
             {
                 return;
             }
             Vector3 normal = _calculateNormal();
             Vector3 forward = _calculateForwardRotation(normal).normalized;
             rb.AddForce(forward * pushForce, ForceMode.Impulse);
+        }
+
+        public void Mount(VRCPlayerApi player)
+        {
+            if (STATE_RIDING || !STATE_GROUNDED)
+            {
+                return;
+            }
+            vRC_Station.UseStation(player);
+            STATE_RIDING = true;
         }
 
         public override void OnPickup()
@@ -148,6 +170,11 @@ namespace UdonSkate.Skateboard
 
             }
             STATE_GROUNDED = false;
+        }
+
+        private void _setPickupable()
+        {
+            vRC_Pickup.pickupable = !STATE_RIDING;
         }
     }
 }
