@@ -54,8 +54,14 @@ namespace UdonSkate.Skateboard
             }
             if (STATE_RIDING)
             {
+                Vector3 normal = _calculateNormal();
+                Vector3 forward = _calculateForwardRotation(normal);
+                if (Vector3.Angle(rb.velocity, forward) > 90)
+                {
+                    forward = -forward;
+                }
                 vRC_Station.gameObject.transform.position = transform.position;
-                vRC_Station.gameObject.transform.rotation = Quaternion.Lerp(vRC_Station.gameObject.transform.rotation, transform.rotation, 0.1f);
+                vRC_Station.gameObject.transform.rotation = Quaternion.LookRotation(new Vector3(forward.x, 0, forward.z), -Physics.gravity);
             }
             else
             {
@@ -85,6 +91,10 @@ namespace UdonSkate.Skateboard
             }
             Vector3 normal = _calculateNormal();
             Vector3 forward = _calculateForwardRotation(normal).normalized;
+            if (Vector3.Angle(rb.velocity, forward) > 90)
+            {
+                forward = -forward;
+            }
             rb.AddForce(forward * pushForce, ForceMode.Impulse);
         }
 
