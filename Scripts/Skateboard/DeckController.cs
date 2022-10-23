@@ -104,7 +104,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
-            float turnForce = 10.0f;
+            float turnForce = 2.0f;
             Vector3 normal = _calculateNormal();
             rb.AddTorque(rb.gameObject.transform.up * turnForce * amount);
         }
