@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 7969305373879535430}
   - component: {fileID: 5963797367684336813}
   - component: {fileID: 3628726515021782955}
+  - component: {fileID: 5885797463362486845}
   m_Layer: 0
   m_Name: Deck
   m_TagString: Untagged
@@ -234,6 +235,19 @@ MonoBehaviour:
   currentlyHeldBy: {fileID: 0}
   pickupable: 1
   proximity: 1
+--- !u!65 &5885797463362486845
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611648186092982631}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.2, y: 0.1, z: 0.85}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &852340507679863376
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,9 +734,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 908491658863015116}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9107838705221273468 stripped
+--- !u!114 &2431384593937528769 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8286086021061014448, guid: b75f27cccc394034da04c13cee91029b,
+  m_CorrespondingSourceObject: {fileID: 3253181395923600141, guid: b75f27cccc394034da04c13cee91029b,
     type: 3}
   m_PrefabInstance: {fileID: 908491658863015116}
   m_PrefabAsset: {fileID: 0}
@@ -732,9 +746,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd10e02c8814f9c4c94970a756fa1628, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2431384593937528769 stripped
+--- !u!114 &9107838705221273468 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3253181395923600141, guid: b75f27cccc394034da04c13cee91029b,
+  m_CorrespondingSourceObject: {fileID: 8286086021061014448, guid: b75f27cccc394034da04c13cee91029b,
     type: 3}
   m_PrefabInstance: {fileID: 908491658863015116}
   m_PrefabAsset: {fileID: 0}
