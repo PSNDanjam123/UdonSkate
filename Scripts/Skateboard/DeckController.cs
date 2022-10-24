@@ -22,7 +22,7 @@ namespace UdonSkate.Skateboard
 
         private bool canMount = true;
         private float mountCooldown = 0.0f;
-        private float mountCooldownDuration = 2.0f;
+        private float mountCooldownDuration = 0.5f;
 
 
         /** STATES */
@@ -125,7 +125,7 @@ namespace UdonSkate.Skateboard
                 return;
             }
             vRC_Station.ExitStation(player);
-            player.SetVelocity(Physics.gravity.normalized * 1.0f);
+            player.SetVelocity(rb.velocity + -Physics.gravity.normalized * player.GetJumpImpulse());
             player.Immobilize(false);
             canMount = false;
             mountCooldown = mountCooldownDuration;
