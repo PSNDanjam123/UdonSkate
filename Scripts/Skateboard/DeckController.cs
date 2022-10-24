@@ -61,7 +61,12 @@ namespace UdonSkate.Skateboard
                     forward = -forward;
                 }
                 vRC_Station.gameObject.transform.position = transform.position;
-                vRC_Station.gameObject.transform.rotation = Quaternion.LookRotation(new Vector3(forward.x, 0, forward.z), -Physics.gravity);
+                vRC_Station.gameObject.transform.rotation = Quaternion.Lerp(
+                    vRC_Station.gameObject.transform.rotation,
+                    Quaternion.LookRotation(
+                        new Vector3(forward.x, 0, forward.z),
+                        -Physics.gravity),
+                    0.1f);
             }
             else
             {
@@ -115,6 +120,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
+            vRC_Station.transform.rotation = player.GetRotation();
             vRC_Station.UseStation(player);
             STATE_RIDING = true;
         }
