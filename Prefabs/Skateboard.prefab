@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 5963797367684336813}
   - component: {fileID: 3628726515021782955}
   - component: {fileID: 5885797463362486845}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Deck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
