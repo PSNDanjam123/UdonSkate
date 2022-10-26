@@ -10,6 +10,8 @@ namespace UdonSkate.Skateboard
         public float forwardFriction = 0.005f;
         public float sideFriction = 0.6f;
 
+        public float playerWeight = 70.0f;
+
         public WheelCollider[] wheels;
 
         private Rigidbody rb;   // rigidbody of the skateboard
@@ -120,7 +122,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
-            var force = forward * player.GetWalkSpeed() * 2;
+            var force = forward * player.GetWalkSpeed() * playerWeight;
             if (Vector3.Angle(rb.velocity, force) > 90)
             {
                 force = -force;
@@ -135,7 +137,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
-            float turnForce = 0.5f;
+            float turnForce = playerWeight * 0.2f;
             rb.AddTorque(rb.gameObject.transform.up * turnForce * amount, ForceMode.Impulse);
         }
 
@@ -145,6 +147,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
+            rb.mass += playerWeight; // weight of rider
             vRC_Station.transform.rotation = player.GetRotation();
             vRC_Station.UseStation(player);
             STATE_RIDING = true;
@@ -155,6 +158,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
+            rb.mass -= playerWeight; // weight of rider
             vRC_Station.ExitStation(player);
             player.SetVelocity(rb.velocity + -Physics.gravity.normalized * player.GetJumpImpulse());
             player.Immobilize(false);
@@ -169,7 +173,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
-            rb.AddForce(normal * player.GetJumpImpulse() * 2, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * player.GetJumpImpulse() * playerWeight, ForceMode.Impulse);
         }
 
         public override void OnPickup()
