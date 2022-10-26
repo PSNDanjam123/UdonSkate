@@ -7,7 +7,6 @@ namespace UdonSkate.Skateboard
 {
     public class DeckController : UdonSharpBehaviour
     {
-        public float pushForce = 5.0f;
         public float forwardFriction = 0.005f;
         public float sideFriction = 0.6f;
 
@@ -21,6 +20,9 @@ namespace UdonSkate.Skateboard
         private bool canMount = true;
         private float mountCooldown = 0.0f;
         private float mountCooldownDuration = 0.5f;
+
+        private Vector3 normal;
+        private Vector3 forward;
 
 
         /** STATES */
@@ -41,11 +43,11 @@ namespace UdonSkate.Skateboard
         void Update()
         {
             _setPickupable();
+            _calculateNormal();
+            _calculateForwardRotation();
             _setGrounded();
             if (STATE_RIDING)
             {
-                Vector3 normal = _calculateNormal();
-                Vector3 forward = _calculateForwardRotation(normal);
                 vRC_Station.gameObject.transform.position = transform.position;
                 vRC_Station.gameObject.transform.rotation = Quaternion.Lerp(
                     vRC_Station.gameObject.transform.rotation,
@@ -78,8 +80,6 @@ namespace UdonSkate.Skateboard
             {
                 return; // no need to process anything as player is holding
             }
-            var normal = _calculateNormal();
-            var forward = _calculateForwardRotation(normal);
             rb.rotation = Quaternion.LookRotation(forward, normal);
 
             /** Audio **/
@@ -109,24 +109,17 @@ namespace UdonSkate.Skateboard
 
         public void Push()
         {
-            if (!STATE_GROUNDED || !STATE_RIDING)
+            if (!STATE_GROUNDED || !STATE_RIDING || rb.velocity.magnitude > 40)
             {
                 return;
             }
-            if (rb.velocity.magnitude > 40)
+            var force = forward * player.GetWalkSpeed() * 2;
+            if (Vector3.Angle(rb.velocity, force) > 90)
             {
-                return;
+                force = -force;
             }
-            Vector3 normal = _calculateNormal();
-            Vector3 forward = _calculateForwardRotation(normal).normalized;
-            if (Vector3.Angle(rb.velocity, forward) > 90)
-            {
-                forward = -forward;
-            }
-
-            forward -= Vector3.Project(forward, Physics.gravity);
-
-            rb.AddForce(forward * pushForce, ForceMode.Impulse);
+            force -= Vector3.Project(force, -Physics.gravity);
+            rb.AddForce(force, ForceMode.Impulse);
         }
 
         public void Turn(float amount)
@@ -135,8 +128,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
-            float turnForce = 2.0f;
-            Vector3 normal = _calculateNormal();
+            float turnForce = 0.5f;
             rb.AddTorque(rb.gameObject.transform.up * turnForce * amount, ForceMode.Impulse);
         }
 
@@ -170,7 +162,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
-            rb.AddForce(rb.transform.up * player.GetJumpImpulse(), ForceMode.Impulse);
+            rb.AddForce(normal * player.GetJumpImpulse() * 2, ForceMode.Impulse);
         }
 
         public override void OnPickup()
@@ -192,9 +184,10 @@ namespace UdonSkate.Skateboard
         }
 
 
-        private Vector3 _calculateForwardRotation(Vector3 normal)
+        private Vector3 _calculateForwardRotation()
         {
-            return transform.forward;
+            var newForward = transform.forward;
+            return forward = newForward;
 
         }
 
@@ -202,15 +195,15 @@ namespace UdonSkate.Skateboard
         {
             if (!Physics.Raycast(transform.position, -transform.up, out RaycastHit hitInfo, 0.5f))
             {
-                return transform.up;
+                return normal = transform.up;
             }
-            return hitInfo.normal;
+            return normal = hitInfo.normal;
 
         }
 
         private void _setGrounded()
         {
-            STATE_GROUNDED = Physics.Raycast(transform.position, -transform.up, out RaycastHit hitInfo, 0.5f);
+            STATE_GROUNDED = Physics.Raycast(transform.position, -transform.up, out RaycastHit hitInfo, 0.3f);
         }
 
         private void _setPickupable()
