@@ -7,8 +7,6 @@ namespace UdonSkate.Skateboard
 {
     public class DeckController : UdonSharpBehaviour
     {
-        public WheelController[] wheels;
-
         public float pushForce = 5.0f;
         public float forwardFriction = 0.005f;
         public float sideFriction = 0.6f;
@@ -81,6 +79,9 @@ namespace UdonSkate.Skateboard
             {
                 return; // no need to process anything as player is holding
             }
+            var normal = _calculateNormal();
+            var forward = _calculateForwardRotation(normal);
+            rb.rotation = Quaternion.LookRotation(forward, normal);
         }
 
         public void Push()
@@ -95,6 +96,9 @@ namespace UdonSkate.Skateboard
             {
                 forward = -forward;
             }
+
+            forward -= Vector3.Project(forward, Physics.gravity);
+
             rb.AddForce(forward * pushForce, ForceMode.Impulse);
         }
 
@@ -148,6 +152,7 @@ namespace UdonSkate.Skateboard
             rb = GetComponent<Rigidbody>();
             vRC_Pickup = GetComponent<VRC_Pickup>();
             player = Networking.LocalPlayer;
+            rb.centerOfMass = -transform.up * 0.02f;
         }
 
 
@@ -159,35 +164,17 @@ namespace UdonSkate.Skateboard
 
         private Vector3 _calculateNormal()
         {
-            Vector3 normal = Vector3.zero;
-            foreach (var wheel in wheels)
+            if (!Physics.Raycast(transform.position, -transform.up, out RaycastHit hitInfo, 0.5f))
             {
-                if (!wheel.Collision)
-                {
-                    continue;
-                }
-                normal += wheel.HitInfo.normal;
+                return transform.up;
+            }
+            return hitInfo.normal;
 
-            }
-            if (normal == Vector3.zero)
-            {
-                normal = transform.up;
-            }
-            return normal;
         }
 
         private void _setGrounded()
         {
-            foreach (var wheel in wheels)
-            {
-                if (wheel.Collision)
-                {
-                    STATE_GROUNDED = true;
-                    return;
-                }
-
-            }
-            STATE_GROUNDED = false;
+            STATE_GROUNDED = Physics.Raycast(transform.position, -transform.up, out RaycastHit hitInfo, 0.5f);
         }
 
         private void _setPickupable()
