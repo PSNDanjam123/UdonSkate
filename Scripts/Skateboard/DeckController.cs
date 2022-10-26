@@ -37,6 +37,8 @@ namespace UdonSkate.Skateboard
 
         /** AUDIO **/
         public AudioSource AudioSkateboardRolling;
+        public AudioSource AudioSkateboardOllie;
+        public AudioSource AudioSkateboardHit;
 
         void Start()
         {
@@ -175,6 +177,8 @@ namespace UdonSkate.Skateboard
                 return;
             }
             rb.AddForce(Vector3.up * player.GetJumpImpulse() * playerWeight, ForceMode.Impulse);
+            AudioSkateboardOllie.volume = 1.0f;
+            AudioSkateboardOllie.Play();
         }
 
         public override void OnPickup()
@@ -193,6 +197,9 @@ namespace UdonSkate.Skateboard
             vRC_Pickup = GetComponent<VRC_Pickup>();
             player = Networking.LocalPlayer;
             rb.centerOfMass = -transform.up * 0.02f;
+            AudioSkateboardHit.volume = 0;
+            AudioSkateboardOllie.volume = 0;
+            AudioSkateboardRolling.volume = 0;
         }
 
 
@@ -215,7 +222,13 @@ namespace UdonSkate.Skateboard
 
         private void _setGrounded()
         {
-            STATE_GROUNDED = Physics.Raycast(transform.position, -transform.up, out RaycastHit hitInfo, 0.3f);
+            var wasGrounded = STATE_GROUNDED;
+            STATE_GROUNDED = Physics.Raycast(transform.position, -transform.up, out RaycastHit hitInfo, 0.1f);
+            if (STATE_GROUNDED && !wasGrounded && !AudioSkateboardHit.isPlaying)
+            {
+                AudioSkateboardHit.volume = Mathf.Clamp(Vector3.Project(rb.velocity, -transform.up).magnitude / 10, 0, 0.5f);
+                AudioSkateboardHit.Play();
+            }
         }
 
         private void _setPickupable()
