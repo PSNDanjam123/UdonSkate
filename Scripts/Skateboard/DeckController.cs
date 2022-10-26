@@ -88,6 +88,7 @@ namespace UdonSkate.Skateboard
             if (STATE_GROUNDED)
             {
                 /** Ground Rotation */
+                rb.angularVelocity = Vector3.zero;
                 rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(forward, normal), 0.5f);
             }
 
@@ -122,7 +123,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
-            var force = forward * player.GetWalkSpeed() * playerWeight;
+            var force = forward * player.GetWalkSpeed() * playerWeight / 16f;
             if (Vector3.Angle(rb.velocity, force) > 90)
             {
                 force = -force;
