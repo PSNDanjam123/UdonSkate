@@ -10,6 +10,8 @@ namespace UdonSkate.Skateboard
         public float forwardFriction = 0.005f;
         public float sideFriction = 0.6f;
 
+        public WheelCollider[] wheels;
+
         private Rigidbody rb;   // rigidbody of the skateboard
         private VRC_Pickup vRC_Pickup;  // pickup component
 
@@ -80,7 +82,12 @@ namespace UdonSkate.Skateboard
             {
                 return; // no need to process anything as player is holding
             }
-            rb.rotation = Quaternion.LookRotation(forward, normal);
+
+            if (STATE_GROUNDED)
+            {
+                /** Ground Rotation */
+                rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(forward, normal), 0.5f);
+            }
 
             /** Audio **/
             var speed = rb.velocity.magnitude / 10;
