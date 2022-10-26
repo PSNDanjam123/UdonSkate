@@ -113,6 +113,10 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
+            if (rb.velocity.magnitude > 40)
+            {
+                return;
+            }
             Vector3 normal = _calculateNormal();
             Vector3 forward = _calculateForwardRotation(normal).normalized;
             if (Vector3.Angle(rb.velocity, forward) > 90)
@@ -190,7 +194,7 @@ namespace UdonSkate.Skateboard
 
         private Vector3 _calculateForwardRotation(Vector3 normal)
         {
-            return Vector3.Cross(Vector3.Cross(normal, transform.forward), normal);
+            return transform.forward;
 
         }
 
