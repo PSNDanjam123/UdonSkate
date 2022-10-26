@@ -41,17 +41,6 @@ namespace UdonSkate.Skateboard
         {
             _setPickupable();
             _setGrounded();
-            if (STATE_PICKED_UP)
-            {
-                return; // no need to process anything as player is holding
-            }
-            if (STATE_GROUNDED)
-            {
-                Vector3 normal = _calculateNormal();
-                _applySurfaceForce(normal);
-                Vector3 forward = _calculateForwardRotation(normal);
-                rb.rotation = Quaternion.LookRotation(forward, normal);
-            }
             if (STATE_RIDING)
             {
                 Vector3 normal = _calculateNormal();
@@ -72,7 +61,6 @@ namespace UdonSkate.Skateboard
             {
                 vRC_Station.gameObject.transform.position = new Vector3(1000, 1000, 1000);
             }
-
             if (!canMount)
             {
                 if (mountCooldown > 0)
@@ -85,7 +73,14 @@ namespace UdonSkate.Skateboard
                     mountCooldown = 0;
                 }
             }
+        }
 
+        void FixedUpdate()
+        {
+            if (STATE_PICKED_UP)
+            {
+                return; // no need to process anything as player is holding
+            }
         }
 
         public void Push()
@@ -155,46 +150,6 @@ namespace UdonSkate.Skateboard
             player = Networking.LocalPlayer;
         }
 
-        private void _applySurfaceForce(Vector3 normal)
-        {
-            // redirect force
-            rb.AddForce(-Vector3.Project(rb.velocity, -normal), ForceMode.Impulse);
-            rb.AddForce(-Vector3.Project(Physics.gravity * 0.3f, -normal), ForceMode.Acceleration);
-
-            // add distance if getting too close to ground
-            if (Physics.Raycast(transform.position, -normal, out RaycastHit hitInfo, 0.2f))
-            {
-                float dist = Vector3.Distance(transform.position, hitInfo.point);
-                rb.AddForce(-Vector3.Project(Physics.gravity * (1 - dist / 0.2f), -normal), ForceMode.Acceleration);
-                if (dist < 0.15f)
-                {
-                    rb.AddForce(-Vector3.Project(Physics.gravity * 0.1f, -normal), ForceMode.Impulse);
-                }
-            }
-
-            // reduce sideways movement
-            if (Vector3.Angle(rb.velocity.normalized, transform.right) > 90)
-            {
-                rb.AddForce(-Vector3.Project(rb.velocity, -transform.right) * sideFriction, ForceMode.Impulse);
-            }
-            else
-            {
-                rb.AddForce(-Vector3.Project(rb.velocity, transform.right) * sideFriction, ForceMode.Impulse);
-            }
-
-            // reduce forward movement
-            if (Vector3.Angle(rb.velocity.normalized, transform.forward) > 90)
-            {
-                rb.AddForce(-Vector3.Project(rb.velocity, -transform.forward) * forwardFriction, ForceMode.Impulse);
-            }
-            else
-            {
-                rb.AddForce(-Vector3.Project(rb.velocity, transform.forward) * forwardFriction, ForceMode.Impulse);
-            }
-
-            // reduce torque
-            rb.AddTorque(new Vector3(0, rb.angularVelocity.y * -0.5f, 0), ForceMode.Acceleration);
-        }
 
         private Vector3 _calculateForwardRotation(Vector3 normal)
         {
