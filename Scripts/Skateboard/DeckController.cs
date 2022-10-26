@@ -123,7 +123,7 @@ namespace UdonSkate.Skateboard
             {
                 return;
             }
-            var force = forward * player.GetWalkSpeed() * playerWeight / 16f;
+            var force = forward * player.GetWalkSpeed() * playerWeight / 8f;
             if (Vector3.Angle(rb.velocity, force) > 90)
             {
                 force = -force;

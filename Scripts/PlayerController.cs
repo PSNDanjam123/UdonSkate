@@ -17,6 +17,9 @@ namespace UdonSkate
         public float playerRunSpeed = 15.0f;
         public float playerStrafeSpeed = 10.0f;
         public float playerJumpImpulse = 5.0f;
+
+
+        private float moveHorizontal = 0.0f;
         void Start()
         {
             player = Networking.LocalPlayer;
@@ -53,6 +56,7 @@ namespace UdonSkate
             {
                 deck.Ollie();
             }
+            deck.Turn(moveHorizontal);
         }
 
         public override void InputUse(bool value, UdonInputEventArgs args)
@@ -62,7 +66,7 @@ namespace UdonSkate
 
         public override void InputMoveHorizontal(float value, UdonInputEventArgs args)
         {
-            deck.Turn(value);
+            moveHorizontal = value;
         }
 
         public override void InputJump(bool value, UdonInputEventArgs args)
