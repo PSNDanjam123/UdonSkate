@@ -25,9 +25,12 @@ namespace UdonSkate.Skateboard
 
         /** STATES */
 
-        private bool STATE_RIDING = false;
-        private bool STATE_GROUNDED = false;
-        private bool STATE_PICKED_UP = false;
+        public bool STATE_RIDING = false;
+        public bool STATE_GROUNDED = false;
+        public bool STATE_PICKED_UP = false;
+
+        /** AUDIO **/
+        public AudioSource AudioSkateboardRolling;
 
         void Start()
         {
@@ -43,10 +46,6 @@ namespace UdonSkate.Skateboard
             {
                 Vector3 normal = _calculateNormal();
                 Vector3 forward = _calculateForwardRotation(normal);
-                if (Vector3.Angle(rb.velocity, forward) > 90)
-                {
-                    forward = -forward;
-                }
                 vRC_Station.gameObject.transform.position = transform.position;
                 vRC_Station.gameObject.transform.rotation = Quaternion.Lerp(
                     vRC_Station.gameObject.transform.rotation,
@@ -82,6 +81,30 @@ namespace UdonSkate.Skateboard
             var normal = _calculateNormal();
             var forward = _calculateForwardRotation(normal);
             rb.rotation = Quaternion.LookRotation(forward, normal);
+
+            /** Audio **/
+            var speed = rb.velocity.magnitude / 10;
+            if (!STATE_GROUNDED)
+            {
+                speed = 0;
+            }
+            AudioSkateboardRolling.volume = Mathf.Clamp(Mathf.Lerp(AudioSkateboardRolling.volume, speed, 0.2f), 0, 1);
+            AudioSkateboardRolling.pitch = Mathf.Clamp(Mathf.Lerp(AudioSkateboardRolling.pitch, speed, 0.2f), 0.4f, 1);
+            if (STATE_GROUNDED)
+            {
+                if (!AudioSkateboardRolling.isPlaying)
+                {
+                    AudioSkateboardRolling.volume = 0;
+                    AudioSkateboardRolling.Play();
+                }
+            }
+            else
+            {
+                if (AudioSkateboardRolling.isPlaying && AudioSkateboardRolling.volume == 0)
+                {
+                    AudioSkateboardRolling.Stop();
+                }
+            }
         }
 
         public void Push()
@@ -104,13 +127,13 @@ namespace UdonSkate.Skateboard
 
         public void Turn(float amount)
         {
-            if (!STATE_GROUNDED || !STATE_RIDING)
+            if (!STATE_RIDING)
             {
                 return;
             }
             float turnForce = 2.0f;
             Vector3 normal = _calculateNormal();
-            rb.AddTorque(rb.gameObject.transform.up * turnForce * amount);
+            rb.AddTorque(rb.gameObject.transform.up * turnForce * amount, ForceMode.Impulse);
         }
 
         public void Mount(VRCPlayerApi player)
@@ -135,6 +158,15 @@ namespace UdonSkate.Skateboard
             canMount = false;
             mountCooldown = mountCooldownDuration;
             STATE_RIDING = false;
+        }
+
+        public void Ollie()
+        {
+            if (!STATE_RIDING || !STATE_GROUNDED)
+            {
+                return;
+            }
+            rb.AddForce(rb.transform.up * player.GetJumpImpulse(), ForceMode.Impulse);
         }
 
         public override void OnPickup()
