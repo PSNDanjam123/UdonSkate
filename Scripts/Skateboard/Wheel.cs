@@ -39,8 +39,8 @@ namespace UdonSkate.Skateboard
 
             var multiplier = 0.33f;
 
-            ApplyCollisionResponse(gravityVelocity * multiplier, hitInfo.point, ForceMode.Acceleration);
-            ApplyCollisionResponse(velocity * multiplier, hitInfo.point, ForceMode.Impulse);
+            ApplyCollisionResponse(gravityVelocity * multiplier, hitInfo.point, hitInfo.normal, ForceMode.Acceleration);
+            ApplyCollisionResponse(velocity * multiplier, hitInfo.point, hitInfo.normal, ForceMode.Impulse);
 
             ApplyPositionCorrection(hitInfo.point - worldCenter, radius, hitInfo.distance);
         }
@@ -51,8 +51,19 @@ namespace UdonSkate.Skateboard
             return collisionHit = Physics.Raycast(worldCenter, Vector3.down, out hitInfo, radius, RaycastLayerMask);
         }
 
-        void ApplyCollisionResponse(Vector3 force, Vector3 point, ForceMode forceMode)
+        void ApplyCollisionResponse(Vector3 force, Vector3 point, Vector3 normal, ForceMode forceMode)
         {
+            var right = m_rigidbody.transform.right;
+            var forward = Vector3.Cross(normal, right);
+            var rightMag = Vector3.Project(force, right).magnitude;
+            var forwardMag = Vector3.Project(force, forward).magnitude;
+
+            var redist = 0.8f;
+            forwardMag += rightMag * redist;
+            rightMag -= rightMag * redist;
+
+            force += (right * rightMag) + (forward * forwardMag);
+
             m_rigidbody.AddForceAtPosition(force, point, forceMode);
         }
 
