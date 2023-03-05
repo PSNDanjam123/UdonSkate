@@ -100,7 +100,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8332598883347555199}
   - component: {fileID: 8654773861555353842}
-  - component: {fileID: 5963797367684336813}
   - component: {fileID: 3628726515021782955}
   - component: {fileID: 5885797463362486845}
   m_Layer: 13
@@ -144,32 +143,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &5963797367684336813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 611648186092982631}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45115577ef41a5b4ca741ed302693907, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactTextPlacement: {fileID: 0}
-  interactText: Use
-  interactTextGO: {fileID: 0}
-  proximity: 2
-  SynchronizePosition: 0
-  AllowCollisionOwnershipTransfer: 0
-  Reliable: 0
-  _syncMethod: 1
-  serializedProgramAsset: {fileID: 11400000, guid: f23c17eb435d2fb41ba2b663afb7931c,
-    type: 2}
-  programSource: {fileID: 11400000, guid: fdbd027326f62fc4d90fd68adbba4a8a, type: 2}
-  serializedPublicVariablesBytesString: Ai8AAAAAATIAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAFQAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AAAAAAAYBAAAAAAAAACcBBAAAAHQAeQBwAGUAAWgAAABTAHkAcwB0AGUAbQAuAEMAbwBsAGwAZQBjAHQAaQBvAG4AcwAuAEcAZQBuAGUAcgBpAGMALgBMAGkAcwB0AGAAMQBbAFsAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4ALgBJAG4AdABlAHIAZgBhAGMAZQBzAC4ASQBVAGQAbwBuAFYAYQByAGkAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AXQBdACwAIABtAHMAYwBvAHIAbABpAGIAAQEJAAAAVgBhAHIAaQBhAGIAbABlAHMALwEAAAABaAAAAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwAuAEwAaQBzAHQAYAAxAFsAWwBWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAEkAbgB0AGUAcgBmAGEAYwBlAHMALgBJAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlACwAIABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgBdAF0ALAAgAG0AcwBjAG8AcgBsAGkAYgABAAAABgEAAAAAAAAAAi8CAAAAAUkAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAGAAMQBbAFsAUwB5AHMAdABlAG0ALgBJAG4AdAAzADIALAAgAG0AcwBjAG8AcgBsAGkAYgBdAF0ALAAgAFYAUgBDAC4AVQBkAG8AbgAuAEMAbwBtAG0AbwBuAAIAAAAGAgAAAAAAAAAnAQQAAAB0AHkAcABlAAEXAAAAUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwAsACAAbQBzAGMAbwByAGwAaQBiACcBCgAAAFMAeQBtAGIAbwBsAE4AYQBtAGUAAR8AAABfAF8AXwBVAGQAbwBuAFMAaABhAHIAcABCAGUAaABhAHYAaQBvAHUAcgBWAGUAcgBzAGkAbwBuAF8AXwBfACcBBAAAAHQAeQBwAGUAARYAAABTAHkAcwB0AGUAbQAuAEkAbgB0ADMAMgAsACAAbQBzAGMAbwByAGwAaQBiABcBBQAAAFYAYQBsAHUAZQACAAAABwUHBQcF
-  publicVariablesUnityEngineObjects: []
-  publicVariablesSerializationDataFormat: 0
 --- !u!114 &3628726515021782955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,6 +526,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3844911228772860876, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
+      propertyPath: m_rigidbody
+      value: 
+      objectReference: {fileID: 8654773861555353842}
+    - target: {fileID: 3844911228772860876, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3844911228772860876, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
     - target: {fileID: 4423149132201489015, guid: b75f27cccc394034da04c13cee91029b,
         type: 3}
       propertyPath: m_Layer
@@ -598,6 +582,17 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.z
       value: -0.23605639
       objectReference: {fileID: 0}
+    - target: {fileID: 7674228391183037297, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
+      propertyPath: m_rigidbody
+      value: 
+      objectReference: {fileID: 8654773861555353842}
+    - target: {fileID: 7674228391183037297, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 7674228391183037297, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
     - target: {fileID: 8286086021061014448, guid: b75f27cccc394034da04c13cee91029b,
         type: 3}
       propertyPath: deck
@@ -905,6 +900,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3844911228772860876, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
+      propertyPath: m_rigidbody
+      value: 
+      objectReference: {fileID: 8654773861555353842}
+    - target: {fileID: 3844911228772860876, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3844911228772860876, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
     - target: {fileID: 4423149132201489015, guid: b75f27cccc394034da04c13cee91029b,
         type: 3}
       propertyPath: m_Layer
@@ -955,6 +961,17 @@ PrefabInstance:
       propertyPath: m_AutoConfigureConnectedAnchor
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7674228391183037297, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
+      propertyPath: m_rigidbody
+      value: 
+      objectReference: {fileID: 8654773861555353842}
+    - target: {fileID: 7674228391183037297, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 7674228391183037297, guid: b75f27cccc394034da04c13cee91029b,
+        type: 3}
     - target: {fileID: 8286086021061014448, guid: b75f27cccc394034da04c13cee91029b,
         type: 3}
       propertyPath: deck
